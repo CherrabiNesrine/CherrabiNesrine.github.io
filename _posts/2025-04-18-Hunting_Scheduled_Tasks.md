@@ -68,6 +68,42 @@ OR process.parent.name : "taskhostw.exe"
 OR process.parent.command_line : "*svchost.exe -k netsvcs -p -s Schedule*"
 ```
 
+Also, look for **Scheduled Task Creation** events — specifically, **Event ID 4698**:
+
+> **Event 4698** = "A scheduled task was created."
+> ✅ **Make sure this logging is enabled!**
+
+## 4.2 Endpoint-Based Hunting
+
+Once suspicious tasks are detected in logs, we move to direct endpoint investigation.
+
+**Useful PowerShell commands:**
+
+- **List all scheduled tasks:**
+
+  ```powershell
+  Get-ScheduledTask -TaskPath "\"
+  ```
+
+By connecting data from logs, and direct endpoint checks, it becomes possible to build a clear picture of any suspicious scheduled task activity happening in the environment.
+
+
+## 🛑 Next Steps
+
+After manual hunting, you can **automate detection** to make your defenses even stronger.
+
+- Check [SigmaHQ](https://github.com/SigmaHQ/sigma) for existing detection rules related to Scheduled Task abuse.
+- Explore [Elastic Detections](https://github.com/elastic/detection-rules) in the official Elastic Security GitHub repository.
+- Consider creating **custom alerts** in your SIEM based on the hunting queries you've built.
+
+Automation ensures that even stealthy scheduled task abuses are caught early — without relying only on manual investigations.
+
+## 5. Conclusion 
+In this blog, we simulated various attacker techniques involving scheduled tasks and explored practical hunting strategies to detect them.
+
+Ultimately, it's not about catching every scheduled task—it's about recognizing what’s normal so you can quickly identify anomalies.
+
+The better you understand your environment, the harder it is for attackers to conceal their actions.
 
 
 
