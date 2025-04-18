@@ -42,8 +42,7 @@ Before hunting, we simulate realistic attacker behavior using three tools:
 
 > **Has a scheduled task been created or modified suspiciously on my network?**
 
-Since scheduled tasks are common, attackers often abuse them to automate actions or maintain persistence.  
-By framing the hunt around this question, we can focus on tasks that **stand out from normal operations**.
+That’s the main question we are  trying to answer. While scheduled tasks are common, attackers often use them to stay persistent or automate malicious actions. By asking this, we can start looking for tasks that stand out
 
 ---
 
@@ -61,13 +60,15 @@ This two-layered approach gives both:
 
 First, find suspicious task executions triggered by task runner processes.
 
-**Example ES|QL query:**
+**Example KQL query:**
 
 ```sql
 process.parent.name : "taskeng.exe" 
 OR process.parent.name : "taskhostw.exe" 
 OR process.parent.command_line : "*svchost.exe -k netsvcs -p -s Schedule*"
 ```
+
+
 
 
 
