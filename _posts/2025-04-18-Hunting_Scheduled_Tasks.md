@@ -29,8 +29,10 @@ Before hunting, we simulate realistic attacker behavior using three tools:
     ```cmd 
     schtasks /create /tn "T1053_005_OnLogon" /sc onlogon /tr "cmd.exe /c calc.exe"
     ```
+     ![atomics](/assets/img/atomics.png)
 - This harmless task leaves behind the artifacts we want to hunt for.
-  
+
+  ![atomics](/assets/img/at.png)
 
 ### 2.2 Sharpersist
 
