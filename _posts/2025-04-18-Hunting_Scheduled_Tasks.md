@@ -26,6 +26,9 @@ Before hunting, we simulate realistic attacker behavior using three tools:
   - List existing scheduled tasks
   - Choose an atomic test under `T1053.005`
   - Copy and execute the commands
+    ```cmd 
+    schtasks /create /tn "T1053_005_OnLogon" /sc onlogon /tr "cmd.exe /c calc.exe"
+    ```
 - This harmless task leaves behind the artifacts we want to hunt for.
   
 
@@ -123,13 +126,14 @@ By connecting data from logs, and direct endpoint checks, it becomes possible to
 
 ## 5. Next Steps
 
-After manual hunting, you can **automate detection** to make your defenses even stronger.
+After we finish our manual hunting, it’s a smart move to automate detection and make our defenses even stronger.
 
-- Check [SigmaHQ](https://github.com/SigmaHQ/sigma) for existing detection rules related to Scheduled Task abuse.
-- Explore [Elastic Detections](https://github.com/elastic/detection-rules) in the official Elastic Security GitHub repository.
-- Consider creating **custom alerts** in your SIEM based on the hunting queries you've built.
+- We can check [SigmaHQ](https://github.com/SigmaHQ/sigma) for existing detection rules related to Scheduled Task abuse.
+- We should also explore the Elastic Security GitHub their [Elastic Detections](https://github.com/elastic/detection-rules) might have something ready for us.
+  
+And if needed, we can build our own custom alerts in the SIEM based on the hunting queries we’ve developed.
 
-Automation ensures that even stealthy scheduled task abuses are caught early — without relying only on manual investigations.
+By putting automation in place, we make sure that even the stealthiest Scheduled Task abuses are caught early  without depending only on manual investigations.
 
 ## 6. Conclusion 
 In this blog, we simulated various attacker techniques involving scheduled tasks and explored practical hunting strategies to detect them.
