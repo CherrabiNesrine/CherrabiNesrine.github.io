@@ -28,8 +28,8 @@ url: "https://cherrabinesrine.github.io"
 github:
   username: github_username # change to your GitHub username
 
-twitter:
-  username: twitter_username # change to your Twitter username
+linkedin:
+  username: Nesrine Cherrabi # change to your Twitter username
 
 social:
   # Change to your full name.
@@ -38,7 +38,7 @@ social:
   email: nesrinecherrabi@gmail.com # change to your email address
   links:
     # The first element serves as the copyright owner's link
-    - https://twitter.com/username # change to your Twitter homepage
+    - https://www.linkedin.com/in/nesrine-cherrabi-0941a9185/# change to your Twitter homepage
     - https://github.com/cherrabinesrine # change to your GitHub homepage
     # Uncomment below to add more social links
     # - https://www.facebook.com/username
