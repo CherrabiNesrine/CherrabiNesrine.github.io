@@ -73,6 +73,24 @@ Also, look for **Scheduled Task Creation** events — specifically, **Event ID 4
 > **Event 4698** = "A scheduled task was created."
 > ✅ **Make sure this logging is enabled!**
 
+```sql
+from logs-system.security-default-*
+| where  @timestamp > now() - 7 day
+| where host.os.family == "windows" and event.code == "4698" and event.action == "scheduled-task-created"
+ /* parsing unstructured data from winlog message to extract a scheduled task Exec command */
+| grok message "(?<Command><Command>.+</Command>)" | eval Command = replace(Command, "(<Command>|</Command>)", "")
+| where Command is not null
+ /* normalise task name by removing usersid and uuid string patterns */
+| eval TaskName = replace(winlog.event_data.TaskName, """((-S-1-5-.*)|\{[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}\})""", "")
+ /* normalise task name by removing random patterns in a file path */
+| eval Task_Command = replace(Command, """(ns[a-z][A-Z0-9]{3,4}\.tmp|DX[A-Z0-9]{3,4}\.tmp|7z[A-Z0-9]{3,5}\.tmp|[0-9\.\-\_]{3,})""", "")
+ /* normalize user home profile path */
+| eval Task_Command = replace(Task_Command, """[cC]:\\[uU][sS][eE][rR][sS]\\[a-zA-Z0-9\.\-\_\$~]+\\""", "C:\\\\users\\\\user\\\\")
+| where Task_Command like "?*" and not starts_with(Task_Command, "C:\\Program Files") and not starts_with(Task_Command, "\"C:\\Program Files")
+| stats tasks_count = count(*), hosts_count = count_distinct(host.id) by Task_Command, TaskName
+| where hosts_count == 1
+```
+
 ## 4.2 Endpoint-Based Hunting
 
 Once suspicious tasks are detected in logs, we move to direct endpoint investigation.
