@@ -115,7 +115,7 @@ Once suspicious tasks are detected in logs, we move to direct endpoint investiga
   ```powershell
   Get-ScheduledTask -TaskPath "\"
   ```
-- **Provides a closer look into each task’s current status** 
+- **This gives us a closer look at each task , and sometimes, that's where hidden persistence shows up** 
 
   ```powershell
    schtasks /query /TN "Sharpersist" /V /FO LIST
