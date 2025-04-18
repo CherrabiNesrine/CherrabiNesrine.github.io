@@ -26,10 +26,13 @@ Before hunting, we simulate realistic attacker behavior using three tools:
   - List existing scheduled tasks
   - Choose an atomic test under `T1053.005`
   - Copy and execute the commands
+    
     ```cmd 
     schtasks /create /tn "T1053_005_OnLogon" /sc onlogon /tr "cmd.exe /c calc.exe"
     ```
+    
      ![atomics](/assets/img/atomics.png)
+    
 - This harmless task leaves behind the artifacts we want to hunt for.
 
   ![atomics](/assets/img/at.png)
@@ -38,17 +41,24 @@ Before hunting, we simulate realistic attacker behavior using three tools:
 
 [Sharpersist](https://github.com/mandiant/Sharpersist) simulates persistence techniques through scheduled tasks.
 
+![Sharp](/assets/img/sharp.png)
+
 - I created a scheduled task not for detection testing, but to **observe the traces and artifacts** it leaves.
 - It helps in understanding the typical footprint of attacker-created tasks.
 
 ```powershell
 SharPersist -t schtask -c "C:\Windows|System32\cmd.exe" -a "/c calc.exe" -n "SharPersist" -m add
   ```
+![Sharpex](/assets/img/1.png)
+
 ---
 
 ## 3. Hunting Hypothesis
 
+
 > **Has a scheduled task been created or modified suspiciously on my network?**
+
+
 
 That’s the main question we are  trying to answer. While scheduled tasks are common, attackers often use them to stay persistent or automate malicious actions. By asking this, we can start looking for tasks that stand out
 
@@ -83,6 +93,9 @@ Search for these files with this query:
 file.path : *\\Windows\\System32\\Tasks\\*
 ```
 
+![taskxml](/assets/img/4.png)
+
+
 Also, look for **Scheduled Task Creation** events — specifically, **Event ID 4698**:
 
 > **Event 4698** = "A scheduled task was created."
@@ -105,6 +118,8 @@ from logs-system.security-default-*
 | stats tasks_count = count(*), hosts_count = count_distinct(host.id) by Task_Command, TaskName
 | where hosts_count == 1
 ```
+![esql](/assets/img/3.png)
+
 
 ### 4.2 Endpoint-Based Hunting
 
@@ -122,6 +137,8 @@ Once suspicious tasks are detected in logs, we move to direct endpoint investiga
   ```powershell
    schtasks /query /TN "Sharpersist" /V /FO LIST
   ```
+  
+![powershell](/assets/img/5.png)
 
 By connecting data from logs, and direct endpoint checks, it becomes possible to build a clear picture of any suspicious scheduled task activity happening in the environment.
 
@@ -138,11 +155,15 @@ And if needed, we can build our own custom alerts in the SIEM based on the hunti
 By putting automation in place, we make sure that even the stealthiest Scheduled Task abuses are caught early  without depending only on manual investigations.
 
 ## 6. Conclusion 
+
 In this blog, we simulated various attacker techniques involving scheduled tasks and explored practical hunting strategies to detect them.
 
 Ultimately, it's not about catching every scheduled task—it's about recognizing what’s normal so you can quickly identify anomalies.
 
 The better you understand your environment, the harder it is for attackers to conceal their actions.
+
+see you in the Next blog ! 
+
 
 
 
