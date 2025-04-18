@@ -27,6 +27,7 @@ Before hunting, we simulate realistic attacker behavior using three tools:
   - Choose an atomic test under `T1053.005`
   - Copy and execute the commands
 - This harmless task leaves behind the artifacts we want to hunt for.
+  
 
 ### 2.2 Sharpersist
 
@@ -36,7 +37,7 @@ Before hunting, we simulate realistic attacker behavior using three tools:
 - It helps in understanding the typical footprint of attacker-created tasks.
 
 ```powershell
-SharPersist -t schtask -c "C:\Windows|System32\cmd.exe" -a "/c calc.exe" -n "Something Cool" -m add
+SharPersist -t schtask -c "C:\Windows|System32\cmd.exe" -a "/c calc.exe" -n "SharPersist" -m add
   ```
 ---
 
@@ -68,6 +69,13 @@ First, find suspicious task executions triggered by task runner processes.
 process.parent.name : "taskeng.exe" 
 OR process.parent.name : "taskhostw.exe" 
 OR process.parent.command_line : "*svchost.exe -k netsvcs -p -s Schedule*"
+```
+
+Next, we want to look for task files stored in the Windows Task folder (System32\Tasks). This is where scheduled tasks are usually defined.
+Search for these files with this query:
+
+```sql
+file.path : *\\Windows\\System32\\Tasks\\*
 ```
 
 Also, look for **Scheduled Task Creation** events — specifically, **Event ID 4698**:
@@ -104,11 +112,16 @@ Once suspicious tasks are detected in logs, we move to direct endpoint investiga
   ```powershell
   Get-ScheduledTask -TaskPath "\"
   ```
+and to provides a closer look into each task’s current status 
+
+```powershell
+   schtasks /query /TN "Sharpersist" /V /FO LIST
+  ```
 
 By connecting data from logs, and direct endpoint checks, it becomes possible to build a clear picture of any suspicious scheduled task activity happening in the environment.
 
 
-## 🛑 Next Steps
+## 5. Next Steps
 
 After manual hunting, you can **automate detection** to make your defenses even stronger.
 
@@ -118,7 +131,7 @@ After manual hunting, you can **automate detection** to make your defenses even 
 
 Automation ensures that even stealthy scheduled task abuses are caught early — without relying only on manual investigations.
 
-## 5. Conclusion 
+## 6. Conclusion 
 In this blog, we simulated various attacker techniques involving scheduled tasks and explored practical hunting strategies to detect them.
 
 Ultimately, it's not about catching every scheduled task—it's about recognizing what’s normal so you can quickly identify anomalies.
