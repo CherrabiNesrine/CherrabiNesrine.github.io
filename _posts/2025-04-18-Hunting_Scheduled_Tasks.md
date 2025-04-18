@@ -1,6 +1,7 @@
 ---
 layout: post
 title:  "Hunting Scheduled Tasks"
+tags: [Scheduled Tasks, Detection, Threat Hunting, simulation ,hunting]
 ---
 
 
