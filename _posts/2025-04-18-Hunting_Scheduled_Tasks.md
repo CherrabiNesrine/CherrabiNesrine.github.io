@@ -35,7 +35,9 @@ Before hunting, we simulate realistic attacker behavior using three tools:
 - I created a scheduled task not for detection testing, but to **observe the traces and artifacts** it leaves.
 - It helps in understanding the typical footprint of attacker-created tasks.
 
-
+```powershell
+SharPersist -t schtask -c "C:\Windows|System32\cmd.exe" -a "/c calc.exe" -n "Something Cool" -m add
+  ```
 ---
 
 ## 3. Hunting Hypothesis
@@ -91,7 +93,7 @@ from logs-system.security-default-*
 | where hosts_count == 1
 ```
 
-## 4.2 Endpoint-Based Hunting
+### 4.2 Endpoint-Based Hunting
 
 Once suspicious tasks are detected in logs, we move to direct endpoint investigation.
 
