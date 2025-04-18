@@ -115,9 +115,9 @@ Once suspicious tasks are detected in logs, we move to direct endpoint investiga
   ```powershell
   Get-ScheduledTask -TaskPath "\"
   ```
-and to provides a closer look into each task’s current status 
+- **Provides a closer look into each task’s current status** 
 
-```powershell
+  ```powershell
    schtasks /query /TN "Sharpersist" /V /FO LIST
   ```
 
