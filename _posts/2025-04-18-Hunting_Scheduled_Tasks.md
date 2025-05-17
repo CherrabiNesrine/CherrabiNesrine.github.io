@@ -7,7 +7,7 @@ tags: [Scheduled Tasks, Detection, Threat Hunting, simulation ,hunting]
 
 ## 1. Introduction
 
-Scheduled tasks are a normal part of system operations — they help with updates, backups, and maintenance jobs.  
+Scheduled tasks are a normal part of system operations, they help with updates, backups, and maintenance jobs.  
 But attackers love them too. They often use scheduled tasks to make their tools run repeatedly, stay hidden, or survive reboots.
 
 In this blog, we’ll simulate how attackers abuse scheduled tasks, build a hunting hypothesis, and walk through detection using both logs and endpoint tools.
@@ -97,7 +97,7 @@ file.path : *\\Windows\\System32\\Tasks\\*
 ![taskxml](/assets/img/4.png)
 
 
-Also, look for **Scheduled Task Creation** events — specifically, **Event ID 4698**:
+Also, look for **Scheduled Task Creation** events specifically **Event ID 4698**:
 
 > **Event 4698** = "A scheduled task was created."
 > ✅ **Make sure this logging is enabled!**
@@ -159,7 +159,7 @@ By putting automation in place, we make sure that even the stealthiest Scheduled
 
 In this blog, we simulated various attacker techniques involving scheduled tasks and explored practical hunting strategies to detect them.
 
-Ultimately, it's not about catching every scheduled task—it's about recognizing what’s normal so you can quickly identify anomalies.
+Ultimately, it's not about catching every scheduled task it's about recognizing what’s normal so you can quickly identify anomalies.
 
 The better you understand your environment, the harder it is for attackers to conceal their actions.
 
